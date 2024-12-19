@@ -16,7 +16,6 @@ export default [
       'no-unused-expressions' : 'error',
       'no-undef' : 'error',
       'prefer-const' : "error",
-      'quotes': ['error', 'backtick'],
       'semi': 'error',
       'no-console' : 'warn'
     }
