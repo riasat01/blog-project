@@ -6,4 +6,4 @@ export interface IUser {
     password: string;
     role: TUserRole;
     isBlocked: boolean;
-};
+}

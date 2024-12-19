@@ -1,9 +1,9 @@
-import { Server } from 'http'
-import mongoose from 'mongoose'
-import config from './app/config'
-import app from './app'
+import { Server } from "http";
+import mongoose from "mongoose";
+import config from "./app/config";
+import app from "./app";
 
-let server: Server
+let server: Server;
 
 const main = async () => {
     try {
@@ -14,6 +14,6 @@ const main = async () => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 main();

@@ -3,15 +3,16 @@ import { Response } from "express";
 interface IResponse<T> {
     statusCode: number;
     success: boolean;
-    message?: string,
+    message?: string;
     data: T;
-};
+}
 
 const sendRestpnse = <T>(res: Response, dataPayload: IResponse<T>) => {
-    const {statusCode, success, message, data} = dataPayload;
+    const { statusCode, success, message, data } = dataPayload;
     res.status(statusCode).json({
         success,
         message,
+        statusCode,
         data,
     });
 };
