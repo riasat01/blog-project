@@ -6,6 +6,6 @@ const createUserIntoDB = async (payload: IUser) => {
     return newUser;
 };
 
-export const UserControllers = {
+export const UserServices = {
     createUserIntoDB,
 };
