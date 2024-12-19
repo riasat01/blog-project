@@ -16,7 +16,6 @@ const loginUserService = async (payload: IAuth) => {
             `loginUserService`,
         );
     }
-    console.log(payload?.password, user?.password);
     if (!(await User.isPasswordMatched(payload?.password, user?.password))) {
         throw new AppError(
             httpStatus.FORBIDDEN,
@@ -24,7 +23,6 @@ const loginUserService = async (payload: IAuth) => {
             `loginUserService`,
         );
     }
-    //create token and sent to the  client
 
     const jwtPayload = {
         userEmail: user.email,

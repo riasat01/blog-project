@@ -4,33 +4,38 @@ import { UserRoles } from "./user.constant";
 import bcrypt from "bcrypt";
 import config from "../../config";
 
-const UserSchema = new Schema<IUser, UserModel>({
-    name: {
-        type: String,
-        required: [true, `User's name is required`],
-    },
-    email: {
-        type: String,
-        required: [true, `User's email is required`],
-        unique: [true, `This email is already registered`],
-    },
-    password: {
-        type: String,
-        required: [true, `User's password is required`],
-    },
-    role: {
-        type: String,
-        enum: {
-            values: [...UserRoles],
-            message: `{VALUE} is not a valid role`,
+const UserSchema = new Schema<IUser, UserModel>(
+    {
+        name: {
+            type: String,
+            required: [true, `User's name is required`],
         },
-        default: `user`,
+        email: {
+            type: String,
+            required: [true, `User's email is required`],
+            unique: [true, `This email is already registered`],
+        },
+        password: {
+            type: String,
+            required: [true, `User's password is required`],
+        },
+        role: {
+            type: String,
+            enum: {
+                values: [...UserRoles],
+                message: `{VALUE} is not a valid role`,
+            },
+            default: `user`,
+        },
+        isBlocked: {
+            type: Boolean,
+            default: false,
+        },
     },
-    isBlocked: {
-        type: Boolean,
-        default: false,
+    {
+        timestamps: true,
     },
-});
+);
 
 UserSchema.pre(`save`, async function (next) {
     this.password = await bcrypt.hash(
