@@ -6,6 +6,7 @@ import handleValidationError from "../errors/handleValidationError";
 import handleMongooseError from "../errors/handleMongooseError";
 import { ZodError } from "zod";
 import handleZodError from "../errors/handleZodError";
+import AppError from "../errors/AppError";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     let errorResponse: IErrorResponse = {
@@ -23,6 +24,14 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
         errorResponse = handleValidationError(error);
     } else if (error instanceof MongooseError) {
         errorResponse = handleMongooseError(error);
+    } else if (
+        error instanceof AppError &&
+        error.location === `loginUserService`
+    ) {
+        errorResponse.statusCode = error.statusCode;
+        errorResponse.message = `Invalid credentials`;
+        errorResponse.error.details = { message: error.message };
+        errorResponse.stack = error.stack as string;
     }
     res.status(httpStatus.BAD_REQUEST).json(errorResponse);
     next(error);
