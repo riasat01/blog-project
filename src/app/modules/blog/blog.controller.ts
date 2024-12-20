@@ -4,9 +4,22 @@ import sendRestpnse from "../../utils/sendResponse";
 import { BlogServices } from "./blog.service";
 import httpStatus from "http-status";
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const postABlog = catchAsync(async (req, res, next) => {
+const postABlog = catchAsync(async (req, res) => {
     const result = await BlogServices.postABlogIntoDB(
+        req.body,
+        req.user as JwtPayload,
+    );
+    sendRestpnse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: `Blog created successfully`,
+        data: result,
+    });
+});
+
+const updateABlog = catchAsync(async (req, res) => {
+    const result = await BlogServices.updateABlogIntoDB(
+        req.params.id,
         req.body,
         req.user as JwtPayload,
     );
@@ -20,4 +33,5 @@ const postABlog = catchAsync(async (req, res, next) => {
 
 export const BlogControllers = {
     postABlog,
+    updateABlog,
 };

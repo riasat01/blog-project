@@ -9,8 +9,15 @@ const router = Router();
 router.post(
     `/`,
     auth(),
-    validateRequest(BlogValidations.blogValidationSchema),
+    validateRequest(BlogValidations.blogPostValidationSchema),
     BlogControllers.postABlog,
+);
+
+router.patch(
+    `/:id`,
+    auth(),
+    validateRequest(BlogValidations.blogUpdateValidationSchema),
+    BlogControllers.updateABlog,
 );
 
 export const BlogRouter = router;

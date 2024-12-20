@@ -18,7 +18,7 @@ const loginUserService = async (payload: IAuth) => {
     }
     if (!(await User.isPasswordMatched(payload?.password, user?.password))) {
         throw new AppError(
-            httpStatus.FORBIDDEN,
+            httpStatus.UNAUTHORIZED,
             `Password do not matched`,
             `loginUserService`,
         );
