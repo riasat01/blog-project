@@ -51,7 +51,38 @@ const updateABlogIntoDB = async (
     return response;
 };
 
+const deleteABlogIntoDB = async (id: string, user: JwtPayload) => {
+    const existingBlog = await Blog.findById(id);
+    if (!existingBlog) {
+        throw new AppError(
+            httpStatus.NOT_FOUND,
+            `Couldn't found the blog`,
+            `deleteABlogIntoDB`,
+        );
+    }
+    if (
+        !(
+            existingBlog.author.toString() === user.userId ||
+            user.role === `admin`
+        )
+    ) {
+        throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            `Unauthorized access`,
+            `deleteABlogIntoDB`,
+        );
+    }
+    await Blog.findByIdAndDelete(id);
+    return undefined;
+};
+
+const getAllBlogsFromDB = async () => {
+    return await Blog.find();
+};
+
 export const BlogServices = {
     postABlogIntoDB,
     updateABlogIntoDB,
+    deleteABlogIntoDB,
+    getAllBlogsFromDB,
 };

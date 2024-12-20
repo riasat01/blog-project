@@ -7,7 +7,7 @@ interface IResponse<T> {
     data: T;
 }
 
-const sendRestpnse = <T>(res: Response, dataPayload: IResponse<T>) => {
+const sendResponse = <T>(res: Response, dataPayload: IResponse<T>) => {
     const { statusCode, success, message, data } = dataPayload;
     res.status(statusCode).json({
         success,
@@ -17,4 +17,4 @@ const sendRestpnse = <T>(res: Response, dataPayload: IResponse<T>) => {
     });
 };
 
-export default sendRestpnse;
+export default sendResponse;
