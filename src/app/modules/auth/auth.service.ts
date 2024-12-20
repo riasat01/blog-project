@@ -25,8 +25,10 @@ const loginUserService = async (payload: IAuth) => {
     }
 
     const jwtPayload = {
-        userEmail: user.email,
-        userName: user.name,
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
     };
 
     const accessToken = createToken(

@@ -24,10 +24,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
         errorResponse = handleValidationError(error);
     } else if (error instanceof MongooseError) {
         errorResponse = handleMongooseError(error);
-    } else if (
-        error instanceof AppError &&
-        error.location === `loginUserService`
-    ) {
+    } else if (error instanceof AppError) {
         errorResponse.statusCode = error.statusCode;
         errorResponse.message = `Invalid credentials`;
         errorResponse.error.details = { message: error.message };
