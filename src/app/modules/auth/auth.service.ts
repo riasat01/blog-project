@@ -4,6 +4,7 @@ import { User } from "../user/user.model";
 import { IAuth } from "./auth.interface";
 import httpStatus from "http-status";
 import { createToken } from "./auth.utils";
+import { JwtPayload } from "jsonwebtoken";
 
 const loginUserService = async (payload: IAuth) => {
     const user = await User.findOne({
@@ -24,6 +25,14 @@ const loginUserService = async (payload: IAuth) => {
         );
     }
 
+    if (user.isBlocked) {
+        throw new AppError(
+            httpStatus.FORBIDDEN,
+            `User is blocked`,
+            `loginUserService`,
+        );
+    }
+
     const jwtPayload = {
         userId: user._id,
         name: user.name,
@@ -40,6 +49,29 @@ const loginUserService = async (payload: IAuth) => {
     };
 };
 
+const blockUserIntoDB = async (userId: string, user: JwtPayload) => {
+    if (!user) {
+        throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            `Unauthorized access`,
+            `blockUserIntoDB`,
+        );
+    }
+
+    if (user.role !== `Admin`) {
+        throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            `Unauthorized access`,
+            `blockUserIntoDB`,
+        );
+    }
+    const result = await User.findByIdAndUpdate(userId, {
+        isBlocked: true,
+    });
+    return result;
+};
+
 export const AuthServices = {
     loginUserService,
+    blockUserIntoDB,
 };
