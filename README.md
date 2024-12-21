@@ -70,4 +70,4 @@ This project is the backend for a blogging platform where users can write, updat
 
 - **Admin**
   - `DELETE /api/admin/blogs/:blogId` - Admin to delete a blog by Id
-  - `GET /api/admin/users/:userId/block` - Admin to block a use by Id
+  - `PATCH /api/admin/users/:userId/block` - Admin to block a use by Id
