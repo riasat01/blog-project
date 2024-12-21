@@ -1,5 +1,4 @@
 import { ErrorRequestHandler } from "express";
-import httpStatus from "http-status";
 import { IErrorResponse } from "../interfaces/IErrorResponse";
 import mongoose, { MongooseError } from "mongoose";
 import handleValidationError from "../errors/handleValidationError";
@@ -30,7 +29,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
         errorResponse.error.details = { message: error.message };
         errorResponse.stack = error.stack as string;
     }
-    res.status(httpStatus.BAD_REQUEST).json(errorResponse);
+    res.status(errorResponse.statusCode).json(errorResponse);
     next(error);
 };
 

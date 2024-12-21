@@ -25,7 +25,7 @@ const UserSchema = new Schema<IUser, UserModel>(
                 values: [...UserRoles],
                 message: `{VALUE} is not a valid role`,
             },
-            default: `user`,
+            default: `User`,
         },
         isBlocked: {
             type: Boolean,

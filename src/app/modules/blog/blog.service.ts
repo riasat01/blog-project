@@ -3,6 +3,8 @@ import { IBlog } from "./blog.interface";
 import { Blog } from "./blog.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { BlogSearchableFields } from "./blog.constant";
 
 const postABlogIntoDB = async (payload: IBlog, user: JwtPayload) => {
     const newBlog: IBlog = {
@@ -31,12 +33,7 @@ const updateABlogIntoDB = async (
             `updateABlogIntoDB`,
         );
     }
-    if (
-        !(
-            existingBlog.author.toString() === user.userId ||
-            user.role === `admin`
-        )
-    ) {
+    if (existingBlog.author.toString() !== user.userId) {
         throw new AppError(
             httpStatus.UNAUTHORIZED,
             `Unauthorized access`,
@@ -63,7 +60,7 @@ const deleteABlogIntoDB = async (id: string, user: JwtPayload) => {
     if (
         !(
             existingBlog.author.toString() === user.userId ||
-            user.role === `admin`
+            user.role === `Admin`
         )
     ) {
         throw new AppError(
@@ -76,8 +73,15 @@ const deleteABlogIntoDB = async (id: string, user: JwtPayload) => {
     return undefined;
 };
 
-const getAllBlogsFromDB = async () => {
-    return await Blog.find();
+const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+    const blogQuery = new QueryBuilder(Blog.find(), query)
+        .search(BlogSearchableFields)
+        .sort()
+        .filter();
+    const result = await blogQuery.modelQuery
+        .populate(`author`, `name email`)
+        .select(`title content author`);
+    return result;
 };
 
 export const BlogServices = {
